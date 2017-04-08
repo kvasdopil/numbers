@@ -1,16 +1,12 @@
-const http = require('http');
+const express = require('express');
 
 const port = 8088;
+const app = express();
 
-const server = http.createServer((req, res) => {
-  res.end('It works');
-});
+// TODO: dev mode
 
-server.on('clientError', (err, socket) => {
-  socket.end('HTTP/1.1 400 Bad Request\r\n\r\n');
-});
+app.use('/', express.static('static'));
 
-server.listen(port);
-
-console.log(`Server listening on localhost:${port}`);
-
+app.listen(port, () =>
+  console.log(`Server listening on localhost:${port}`)
+);
