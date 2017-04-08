@@ -1,0 +1,19 @@
+{
+  "name": "numbers",
+  "version": "1.0.0",
+  "description": "Numbers game",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kvasdopil/numbers.git"
+  },
+  "author": "Alexey Guskov",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kvasdopil/numbers/issues"
+  },
+  "homepage": "https://github.com/kvasdopil/numbers"
+}
