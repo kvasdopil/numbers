@@ -1,15 +1,23 @@
 import React from 'react';
 import ReactDom from 'react-dom';
-import sockjs from 'sockjs-client';
 
-// TODO: server, ws, express, statics
+// TODO: sockjs?
 // TODO: hmre
 // TODO: flow? ts?
 // TODO: server diagnostics output
 // TODO: client tests
 // TODO: server tests
 
-document.title = 'The Numbers Game 22';
+document.title = 'The Numbers Game';
+
+const sock = new WebSocket(`ws://${document.location.host}`); // FIXME: reconnect on failure
+
+sock.onopen = () => {
+	sock.onclose = () => console.log('close');
+	sock.onmessage = msg => console.log(msg);
+
+	sock.send('ping');
+}
 
 const App = props => 
   <div>Hello world</div>

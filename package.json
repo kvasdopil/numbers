@@ -24,11 +24,10 @@
     "babel-preset-react": "^6.24.1",
     "react": "^15.5.3",
     "react-dom": "^15.5.3",
-    "sockjs-client": "^1.1.2",
     "webpack": "^2.3.3"
   },
   "dependencies": {
     "express": "^4.15.2",
-    "sockjs": "^0.3.18"
+    "ws": "^2.2.3"
   }
 }

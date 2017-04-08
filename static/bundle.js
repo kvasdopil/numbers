@@ -10019,11 +10019,27 @@ var _reactDom2 = _interopRequireDefault(_reactDom);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+// TODO: sockjs?
 // TODO: hmre
 // TODO: flow? ts?
 // TODO: server diagnostics output
 // TODO: client tests
 // TODO: server tests
+
+document.title = 'The Numbers Game';
+
+var sock = new WebSocket('ws://' + document.location.host); // FIXME: reconnect on failure
+
+sock.onopen = function () {
+	sock.onclose = function () {
+		return console.log('close');
+	};
+	sock.onmessage = function (msg) {
+		return console.log(msg);
+	};
+
+	sock.send('ping');
+};
 
 var App = function App(props) {
 	return _react2.default.createElement(
