@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDom from 'react-dom';
 
-// TODO: sockjs?
+// TODO: dev server
 // TODO: hmre
 // TODO: flow? ts?
 // TODO: server diagnostics output
@@ -20,7 +20,7 @@ sock.onopen = () => {
 }
 
 const App = props => 
-  <div>Hello world</div>
+  <div>Hello privet medved</div>
 
 ReactDom.render(
 	<App />, 
