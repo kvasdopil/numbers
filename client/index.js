@@ -1,8 +1,11 @@
 import React from 'react';
 import ReactDom from 'react-dom';
 
-// TODO: dev server
-// TODO: hmre
+import App from './App';
+
+import { AppContainer } from 'react-hot-loader';
+
+// TODO: production env
 // TODO: flow? ts?
 // TODO: server diagnostics output
 // TODO: client tests
@@ -10,7 +13,7 @@ import ReactDom from 'react-dom';
 
 document.title = 'The Numbers Game';
 
-const sock = new WebSocket(`ws://${document.location.host}`); // FIXME: reconnect on failure
+const sock = new WebSocket(`ws://${document.location.host}/numbers`); // FIXME: reconnect on failure
 
 sock.onopen = () => {
 	sock.onclose = () => console.log('close');
@@ -19,10 +22,17 @@ sock.onopen = () => {
 	sock.send('ping');
 }
 
-const App = props => 
-  <div>Hello privet medved</div>
+const render = Comp =>
+	ReactDom.render(
+		<AppContainer>
+			<Comp />
+		</AppContainer>, 
+		document.getElementById('root')
+	);
 
-ReactDom.render(
-	<App />, 
-	document.getElementById('root')
-);
+render(App);
+
+if(module.hot)
+	module.hot.accept('./App', () => 
+    render(require('./App').default)
+	)
