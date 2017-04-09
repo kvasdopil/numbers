@@ -42,7 +42,6 @@ const store = {
 	next: {
 		id: 999,
 		question: '10/10=2',
-		answer: false,
 		miss: false,
 	}
 }
@@ -78,4 +77,12 @@ describe('Round', () => {
 		expect(mount(<Round {...store.rounds[1]} />).text()).to.not.contain('MISS');
 		expect(mount(<Round {...store.rounds[1]} />).text()).to.contain('OK');
 	})
+})
+
+describe('ActiveRound', () => {
+	it('renders id and question', () => {
+		const wrapper = shallow(<ActiveRound {...store.next} />);
+		expect(wrapper.text()).to.contain(store.next.question);
+		expect(wrapper.text()).to.contain(store.next.id);
+	});
 })
