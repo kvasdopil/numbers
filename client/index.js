@@ -27,7 +27,7 @@ const render = Comp =>
 		<AppContainer>
 			<Comp />
 		</AppContainer>, 
-		document.getElementById('root')
+		document.querySelector('#root')
 	);
 
 render(App);
