@@ -8,8 +8,6 @@ import GameStats from '../client/GameStats';
 import Round from '../client/Round';
 import ActiveRound from '../client/ActiveRound';
 
-
-
 describe('the setup', () => {
 	it('works', () => {
 		expect(true).to.be.true;
@@ -29,21 +27,21 @@ const store = {
 	rounds: [
 		{
 			id: 123,
-			query: '10x10=100',
+			question: '10x10=100',
 			answer: true,
 			your: true, 
 			miss: true,
 			result: false,
 		},{
 			id: 345,
-			query: '10+10=10',
+			question: '10+10=10',
 			answer: false,
 			your: false, 
 			miss: false,
 			result: true,
 		},{
 			id: 678,
-			query: '10-10=0',
+			question: '10-10=0',
 			answer: true,
 			your: false, 
 			miss: false,
@@ -52,7 +50,7 @@ const store = {
 	],
 	next: {
 		id: 999,
-		query: '10/10=2',
+		question: '10/10=2',
 		answer: false,
 		miss: false,
 	}
@@ -64,4 +62,14 @@ describe('GameTable', () => {
 		expect(wrapper.find(Round)).to.have.length(3);
 		expect(wrapper.find(ActiveRound)).to.have.length(1);
 	})
+})
+
+describe('Round', () => {
+	const wrapper = mount(<Round {...store.rounds[0]} />);
+	it('renders the question', () => 
+		expect(wrapper.text()).to.contain(store.rounds[0].question)
+	)
+	it('renders the id', () =>
+		expect(wrapper.text()).to.contain(store.rounds[0].id)
+	)
 })

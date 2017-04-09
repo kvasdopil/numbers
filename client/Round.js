@@ -1,4 +1,4 @@
 import React from 'react';
 
 export default props =>
-	<div>round</div>
+	<div>{props.id}: {props.question}</div>
