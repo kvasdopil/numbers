@@ -8,6 +8,8 @@ import GameStats from '../client/GameStats';
 import Round from '../client/Round';
 import ActiveRound from '../client/ActiveRound';
 
+import NumbersStore from '../client/NumbersStore';
+
 describe('the setup', () => {
 	it('works', () => {
 		expect(true).to.be.true;
@@ -97,4 +99,15 @@ describe('ActiveRound', () => {
 		expect(wrapper.find('button')).to.have.length(0);
 		expect(wrapper.text()).to.contain('MISS');
 	});
+})
+
+describe('NumbersStore', () => {
+	it('can load data', () => {
+		const store = new NumbersStore();
+
+		expect(store.rounds).to.be.false;
+		store.load();
+
+		expect(store.rounds).to.have.length(3);
+	})
 })

@@ -1,6 +1,8 @@
 import React from 'react';
 import Game from './Game';
 
+import NumbersStore from './NumbersStore';
+
 // App is our smart component containing the store
 
 const store = {
