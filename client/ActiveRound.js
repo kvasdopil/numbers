@@ -2,16 +2,24 @@ import React from 'react';
 import Round from './Round';
 
 export default props =>
-	<div>
-		{props.id}: 
-		{props.question}:
-		{props.success ? "OK" : "FAILED"}
-		{props.miss 
-			? "MISS" 
-			: <div>
-					<button>Yes</button>
-					<button>No</button>			
-				</div>
-		}
-	</div>
+	<tr>
+		<td>{props.id}</td>
+		<td>{props.question}</td>
+		<td>
+			{props.miss 
+				? "MISS" 
+				: <div>
+						<button className="btn btn-success">Yes</button>
+						&nbsp;
+						<button className="btn btn-danger">No</button>			
+					</div>
+			}
+		</td>
+		<td>
+			{props.miss
+				? (props.success ? "OK" : "FAILED")
+				: null
+			}
+		</td>
+	</tr>
 

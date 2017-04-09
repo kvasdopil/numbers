@@ -8,30 +8,26 @@ const store = {
 		{
 			id: 123,
 			question: '10x10=100',
-			answer: true,
 			your: true, 
 			miss: true,
-			result: false,
+			success: false,
 		},{
 			id: 345,
 			question: '10+10=10',
-			answer: false,
 			your: false, 
 			miss: false,
-			result: true,
+			success: true,
 		},{
 			id: 678,
 			question: '10-10=0',
-			answer: true,
 			your: false, 
 			miss: false,
-			result: false,
+			success: false,
 		},
 	],
 	next: {
 		id: 999,
 		question: '10/10=2',
-		answer: false,
 		miss: false,
 	}
 };

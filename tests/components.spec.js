@@ -77,6 +77,9 @@ describe('Round', () => {
 		expect(mount(<Round {...store.rounds[1]} />).text()).to.not.contain('MISS');
 		expect(mount(<Round {...store.rounds[1]} />).text()).to.contain('OK');
 	})
+	it('renders your reply', () => {
+		expect(mount(<Round {...store.rounds[1]} />).text()).to.contain('No');
+	})
 })
 
 describe('ActiveRound', () => {
