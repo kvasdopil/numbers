@@ -11,6 +11,9 @@ import { AppContainer } from 'react-hot-loader';
 // TODO: client tests
 // TODO: server tests
 
+// TODO: use semantic instead on bootstrap
+// TODO: do we really need ws?
+
 document.title = 'The Numbers Game';
 
 const sock = new WebSocket(`ws://${document.location.host}/numbers`); // FIXME: reconnect on failure
