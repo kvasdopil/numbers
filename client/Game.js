@@ -5,6 +5,6 @@ import GameStats from './GameStats';
 
 export default (props) => 
 	<div>
-		<GameTable />
 		<GameStats />
+		<GameTable rounds={props.rounds} next={props.next}/>
 	</div>

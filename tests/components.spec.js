@@ -14,38 +14,29 @@ describe('the setup', () => {
 	})
 });
 
-describe('Game', () => {
-	it('contains the table and score', () => {
-		expect(shallow(<Game />).containsAllMatchingElements([
-			<GameTable />,
-			<GameStats />,
-		])).to.be.equal(true);
-	})
-});
-
 const store = {
 	rounds: [
 		{
 			id: 123,
 			question: '10x10=100',
-			answer: true,
+//			answer: true,
 			your: true, 
 			miss: true,
-			result: false,
+			success: false,
 		},{
 			id: 345,
 			question: '10+10=10',
-			answer: false,
+//			answer: false,
 			your: false, 
 			miss: false,
-			result: true,
+			success: true,
 		},{
 			id: 678,
 			question: '10-10=0',
-			answer: true,
+//			answer: true,
 			your: false, 
 			miss: false,
-			result: false,
+			success: false,
 		},
 	],
 	next: {
@@ -55,6 +46,14 @@ const store = {
 		miss: false,
 	}
 }
+
+describe('Game', () => {
+	const wrapper = shallow(<Game {...store} />);
+	it('contains the table and score', () => {
+		expect(wrapper.find(GameTable)).to.have.length(1);
+		expect(wrapper.find(GameStats)).to.have.length(1);
+	})
+});
 
 describe('GameTable', () => {
 	it('contains some rounds', () => {
@@ -72,4 +71,11 @@ describe('Round', () => {
 	it('renders the id', () =>
 		expect(wrapper.text()).to.contain(store.rounds[0].id)
 	)
+	it('renders the result', () => {
+		expect(mount(<Round {...store.rounds[0]} />).text()).to.contain('MISS');
+		expect(mount(<Round {...store.rounds[0]} />).text()).to.contain('FAIL');
+
+		expect(mount(<Round {...store.rounds[1]} />).text()).to.not.contain('MISS');
+		expect(mount(<Round {...store.rounds[1]} />).text()).to.contain('OK');
+	})
 })

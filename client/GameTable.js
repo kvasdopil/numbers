@@ -5,7 +5,7 @@ import ActiveRound from './ActiveRound';
 export default props => 
 	<div>
 		{props.rounds.map(round =>
-			<Round key={round.id} />
+			<Round key={round.id} {...round} />
 		)}
-		<ActiveRound key={props.next.id} />
+		<ActiveRound key={props.next.id} {...props.next} />
 	</div>
