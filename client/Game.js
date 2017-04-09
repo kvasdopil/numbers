@@ -1,4 +1,10 @@
 import React from 'react';
 
+import GameTable from './GameTable';
+import GameStats from './GameStats';
+
 export default (props) => 
-	<div>The game will be here</div>
+	<div>
+		<GameTable />
+		<GameStats />
+	</div>

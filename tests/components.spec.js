@@ -16,6 +16,6 @@ describe('Game', () => {
 		expect(shallow(<Game />).containsAllMatchingElements([
 			<GameTable />,
 			<GameStats />,
-		]));
+		])).to.be.equal(true);
 	})
 })
