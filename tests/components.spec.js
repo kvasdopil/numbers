@@ -85,4 +85,13 @@ describe('ActiveRound', () => {
 		expect(wrapper.text()).to.contain(store.next.question);
 		expect(wrapper.text()).to.contain(store.next.id);
 	});
+	it('renders a pair of buttons', () => {
+		const wrapper = shallow(<ActiveRound {...store.next} />);
+		expect(wrapper.find('button')).to.have.length(2);
+	});
+	it('wont render buttons of missed already', () => {
+		const wrapper = shallow(<ActiveRound {...store.next} miss />);
+		expect(wrapper.find('button')).to.have.length(0);
+		expect(wrapper.text()).to.contain('MISS');
+	});
 })
