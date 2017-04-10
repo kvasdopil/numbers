@@ -11,7 +11,7 @@ export default observer(props =>
 				<tr>
 					<th style={{width: '10rem'}}>Round</th>
 					<th>Expression</th>
-					<th>Your answer</th>
+					<th style={{width: '50%'}}>Your answer</th>
 					<th>Result</th>
 				</tr>
 			</thead>
@@ -19,7 +19,7 @@ export default observer(props =>
 				{props.rounds.map(round => 
 					<Round key={round.id} {...round} />
 				)}
-				<ActiveRound key={props.next.id} {...props.next} />
+				<ActiveRound key={props.next.id} {...props.next} onAnswer={props.onAnswer}/>
 			</tbody>
 		</table>
 	</div>

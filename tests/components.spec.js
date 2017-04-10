@@ -88,22 +88,26 @@ describe('Round', () => {
 
 describe('ActiveRound', () => {
 	it('renders id and question', () => {
-		const wrapper = shallow(<ActiveRound {...store.next} />);
+		const wrapper = mount(<ActiveRound {...store.next} />);
 		expect(wrapper.text()).to.contain(store.next.question);
 		expect(wrapper.text()).to.contain(store.next.id);
 	});
 	it('renders a pair of buttons', () => {
-		const wrapper = shallow(<ActiveRound {...store.next} />);
+		const wrapper = mount(<ActiveRound {...store.next} />);
 		expect(wrapper.find('button')).to.have.length(2);
 	});
 	it('wont render buttons of missed already', () => {
-		const wrapper = shallow(<ActiveRound {...store.next} miss />);
+		const wrapper = mount(<ActiveRound {...store.next} miss />);
 		expect(wrapper.find('button')).to.have.length(0);
 		expect(wrapper.text()).to.contain('MISS');
 	});
 	it('will render spinner when waiting for new round', () => {
-		const wrapper = shallow(<ActiveRound />);
+		const wrapper = mount(<ActiveRound />);
 		expect(wrapper.text()).to.contain('aiting');
+	});
+	it('wont render buttons when answer is sent', () => {
+	  const wrapper = mount(<ActiveRound answer={false}/>);
+		expect(wrapper.find('button')).to.have.length(0);
 	})
 })
 

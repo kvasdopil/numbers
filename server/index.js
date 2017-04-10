@@ -40,32 +40,78 @@ sock.on('connection', conn => {
 		console.log('close');
 		onNewClient();
 	});
+
+	conn.on('message', data => {
+		data = JSON.parse(data);
+		if(data.event == 'answer')
+  		onAnswer(data.data, conn)
+	});
+
+	if(conns.length) // 1st client
+		nextRound();
 });
 
 server.listen(port, () =>
   console.log(`Server listening on localhost:${port}`)
 );
 
-const bcast = (event, data) => {
+var bcast = (event, data) => {
 	for(const conn of conns)
 		try {
   	  conn.send(JSON.stringify({event, data}));
   	} catch(e) {}
 }
 
-const onNewClient = () => 
+var onNewClient = () => 
 	bcast('stat', conns.length);
 
 let next = undefined;
 
-let id = 1;
+let id = 0;
 
-setInterval(() => {
+var onAnswer = (answer, src) =>
+{
+	console.log('got answer', answer);
+
+	if(!next)
+		return;
+
+	// FIXME: check round id
+	// FIXME: check answer is right
+	// FIXME: check everyone has answered
+	// FIXME: need timeout for all answers or timeout since 1st answer
+
+	// FIXME: skip ones who already voted
+
+	for(let conn of conns)
+		try {
+			conn.send(JSON.stringify({event: 'end', data: {
+				question: next.question,
+				id,
+				miss: (conn == src) ? false : true,
+				success: (conn == src && answer == next.answer) ? false : true,
+			}}));
+		} catch(e) {}
+
+	this.next = undefined;
+
+	setTimeout(() => nextRound(), 3000); // avoid multiple answers?
+}
+
+var nextRound = () => {
+
+	const ops = ['+','-','/','*'];
+
+	const a = Math.round(Math.random()*10);
+	const b = Math.round(Math.random()*9) + 1; // can not be 0
+	const op = Math.round(Math.random()*3);
+
 	next = {
 		id: id++,
-		question: '10+10=10',
+		question: `${a}${ops[op]}${b} = 10`,
 		answer: true,
 	};
 
-	bcast('next', {question: next.question, id});
-}, 10000);
+  bcast('next', {question: next.question, id});
+}
+

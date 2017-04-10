@@ -11,63 +11,36 @@ export default class NumbersStore {
 	@observable rounds = [];
 
 	@observable next = {};
-/*
-	rounds: [
-		{
-			id: 123,
-			question: '10x10=100',
-			your: true, 
-			miss: true,
-			success: false,
-		},{
-			id: 345,
-			question: '10+10=10',
-			your: false, 
-			miss: false,
-			success: true,
-		},{
-			id: 678,
-			question: '10-10=0',
-			your: false, 
-			miss: false,
-			success: false,
-		},
-	]
 
-	const next = {
-		id: 999,
-		question: '10/10=2',
-		miss: false,
-	}
-*/
 	updateStat(data)
 	{
 		this.players = data;
 	}
 
-	endRound(answer = undefined)
+	endRound(round)
 	{
-		if(!this.next.id)
-			return;
-
-		this.rounds.push({
-			id: this.next.id,
-			question: this.next.question,
-			answer: false,
-			miss: true,
-		});
+		console.log('end', round);
+		this.rounds.push(round);
+		while(this.rounds.length > 10)
+			this.rounds.shift(); // FIXME: add animation here
 
 		this.next = {};
 	}
 
 	startNextRound(data)
 	{
-  	this.endRound();
-
+  	//this.endRound();
 		this.next = {
 			id: data.id,
 			question: data.question,
+			answer: undefined,
 		};
+	}
+
+	onAnswer(answer)
+	{
+		this.next.answer = answer;
+		this.send('answer', answer);
 	}
 
 	handlers = [];
@@ -84,15 +57,22 @@ export default class NumbersStore {
 
   constructor(sock)
   {
-  	//sock.onopen = conn => {
-  		sock.onmessage = data => {
-	  		data = JSON.parse(data.data);
-	  		console.log('message', data);
-	  		this.emit(data.event, data.data);
-	  	}
-	  //}
-
+  	this.sock = sock;
+		this.sock.onmessage = data => {
+  		data = JSON.parse(data.data);
+  		console.log('message', data);
+  		this.emit(data.event, data.data);
+  	}
+ 
   	this.on('stat', data => this.updateStat(data));
   	this.on('next', data => this.startNextRound(data));
+  	this.on('end', data => this.endRound(data));
+  }
+
+  send(event, data)
+  {
+  	try {
+  		this.sock.send(JSON.stringify({event, data}));
+  	} catch(e) {}
   }
 }
