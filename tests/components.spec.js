@@ -101,6 +101,14 @@ describe('ActiveRound', () => {
 	});
 })
 
+describe('GameStats', () => {
+	it('shows user count and your score', () => {
+		const wrapper = shallow(<GameStats score={999} users={888} />);
+		expect(wrapper.text()).to.contain("999");
+		expect(wrapper.text()).to.contain("888");
+	})
+})
+
 describe('NumbersStore', () => {
 	it('can load data', () => {
 		const store = new NumbersStore();
