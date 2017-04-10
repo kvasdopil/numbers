@@ -5,34 +5,10 @@ import NumbersStore from './NumbersStore';
 
 // App is our smart component containing the store
 
-const store = {
-	rounds: [
-		{
-			id: 123,
-			question: '10x10=100',
-			your: true, 
-			miss: true,
-			success: false,
-		},{
-			id: 345,
-			question: '10+10=10',
-			your: false, 
-			miss: false,
-			success: true,
-		},{
-			id: 678,
-			question: '10-10=0',
-			your: false, 
-			miss: false,
-			success: false,
-		},
-	],
-	next: {
-		id: 999,
-		question: '10/10=2',
-		miss: false,
-	}
-};
+document.title = 'The Numbers Game';
+
+const sock = new WebSocket(`ws://${document.location.host}/numbers`); // FIXME: reconnect on failure
+const store = new NumbersStore(sock);
 
 export default props => 
-  <Game {...store} />
+  <Game store={store} />

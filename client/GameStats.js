@@ -1,16 +1,26 @@
 import React from 'react';
+import { observer } from 'mobx-react';
 
-export default props =>
-	<div style={{margin: '.5rem 1rem 1rem 1rem'}}>
-		Your score: <span className="glyphicon glyphicon-star" /> {props.score}
 
-		<div style={{float:'right'}} >
-		  <span className="glyphicon glyphicon-user" />
-		  &nbsp;
-		  {props.users == 1
-		  	? `${props.users} user ` 
-		  	: `${props.users} users `
-		  } 
-		  playing right now
+@observer
+export default class GameStats extends React.Component {
+	render()
+	{
+		const props = this.props;
+		console.log('GameStats', props);
+
+		return <div className="ui panel" style={{padding: '1rem'}}>
+			Your score: <i className="ui orange star icon" />{props.score}
+		
+			<div style={{float:'right'}} >
+			  <i className="ui blue user icon" />
+			  {/* FIXME: thats not localizable */}
+			  {props.players == 1
+			  	? `${props.players} player ` 
+			  	: `${props.players} players `
+			  } 
+			  playing right now
+			</div>
 		</div>
-	</div>
+	}
+} 

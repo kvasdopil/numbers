@@ -45,11 +45,13 @@ const store = {
 		id: 999,
 		question: '10/10=2',
 		miss: false,
-	}
+	},
+	players: 0,
+	score: 0,
 }
 
 describe('Game', () => {
-	const wrapper = shallow(<Game {...store} />);
+	const wrapper = shallow(<Game store={store} />);
 	it('contains the table and score', () => {
 		expect(wrapper.find(GameTable)).to.have.length(1);
 		expect(wrapper.find(GameStats)).to.have.length(1);
@@ -99,23 +101,34 @@ describe('ActiveRound', () => {
 		expect(wrapper.find('button')).to.have.length(0);
 		expect(wrapper.text()).to.contain('MISS');
 	});
+	it('will render spinner when waiting for new round', () => {
+		const wrapper = shallow(<ActiveRound />);
+		expect(wrapper.text()).to.contain('aiting');
+	})
 })
 
 describe('GameStats', () => {
 	it('shows user count and your score', () => {
-		const wrapper = shallow(<GameStats score={999} users={888} />);
+		const wrapper = shallow(<GameStats score={999} players={888} />);
 		expect(wrapper.text()).to.contain("999");
 		expect(wrapper.text()).to.contain("888");
 	})
 })
 
-describe('NumbersStore', () => {
-	it('can load data', () => {
-		const store = new NumbersStore();
+// describe('NumbersStore', () => {
+// 	it('can load data', () => {
+// 		const store = new NumbersStore();
 
-		expect(store.rounds).to.be.false;
-		store.load();
+// 		expect(store.rounds).to.be.false;
+// 		store.load();
 
-		expect(store.rounds).to.have.length(3);
-	})
-})
+// 		expect(store.rounds).to.have.length(3);
+// 	})
+
+// 	it('can send result', () => {
+// 		const store = new NumbersStore();
+// 		store.load();
+
+// 		store.sendAnswer(true);
+// 	})
+// });

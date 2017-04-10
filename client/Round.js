@@ -1,6 +1,8 @@
 import React from 'react';
 
-export default props => 
+import { observer } from 'mobx-react';
+
+export default observer(props => 
 	<tr>
 		<td>{props.id}</td>
 		<td>{props.question}</td>
@@ -17,3 +19,4 @@ export default props =>
 			}
 		</td>
 	</tr>
+)

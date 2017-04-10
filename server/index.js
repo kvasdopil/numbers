@@ -26,17 +26,46 @@ app.use('/', express.static('static'));
 
 const sock = new ws.Server({server});
 
+let conns = [];
+
 sock.on('connection', conn => {
+	conns.push(conn);
+
 	console.log('new client');
 
-	conn.on('message', data => {
-		console.log('new data', data);
-		conn.send('pong');
-	});
+	onNewClient();
 
-	conn.on('close', () => console.log('close'));
+	conn.on('close', () => {
+		conns = conns.filter(c => c != conn);
+		console.log('close');
+		onNewClient();
+	});
 });
 
 server.listen(port, () =>
   console.log(`Server listening on localhost:${port}`)
 );
+
+const bcast = (event, data) => {
+	for(const conn of conns)
+		try {
+  	  conn.send(JSON.stringify({event, data}));
+  	} catch(e) {}
+}
+
+const onNewClient = () => 
+	bcast('stat', conns.length);
+
+let next = undefined;
+
+let id = 1;
+
+setInterval(() => {
+	next = {
+		id: id++,
+		question: '10+10=10',
+		answer: true,
+	};
+
+	bcast('next', {question: next.question, id});
+}, 10000);
