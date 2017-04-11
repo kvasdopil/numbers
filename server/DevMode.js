@@ -6,7 +6,7 @@ function start(app)
 	const WebpackDevMiddleware = require('webpack-dev-middleware');
 	const WebpackHotMiddleware = require('webpack-hot-middleware');
 
-	const config = require('../webpack.config');
+	const config = require('../webpack.config.dev');
 	const compiler = webpack(config);
 
 	app.use(WebpackDevMiddleware(compiler));

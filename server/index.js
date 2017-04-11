@@ -12,7 +12,8 @@ const app = express();
 
 const server = http.createServer(app);
 
-DevMode.start(app);
+if(process.argv[2] == "--devmode")
+  DevMode.start(app);
 
 app.use('/', express.static('static'));
 
