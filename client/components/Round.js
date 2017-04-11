@@ -2,8 +2,7 @@ import React from 'react';
 
 import { observer } from 'mobx-react';
 
-export default observer(props => 
-	<tr>
+export default observer(props => <tr ref={i => this.tr = i}>
 		<td>{props.id}</td>
 		<td>{props.question}</td>
 		<td>

@@ -24,7 +24,7 @@ export default class NumbersStore {
 	end(success) // end round
 	{
 		if(success)
-			this.score++; // FIXME: add animation here
+			this.score++; 
 
 		if(!this.next.id)
 			return;
