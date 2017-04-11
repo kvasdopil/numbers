@@ -108,17 +108,11 @@ class Server
 
 			const res = [a+b, a-b, a*b, a/b];
 			let result = res[o];
-			let answer = true;
 
-			if(Math.round() > .5) // false answer
-			{
-				const n = (o + Math.round(Math.random() * 3) + 1) % 4;
-				result = res[n];
-				answer = false;
-			}
+			if(result % 1 != 0)
+				continue; // only whole numbers are allowed
 
-			if(result % 1 == 0) // anly whole numbers allowed
-  			return {question: `${a}${ops[o]}${b}=${result}`, answer};
+  		return {question: `${a}${ops[o]}${b} = ?`, answer: result};
 		}
 	}
 }

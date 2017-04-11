@@ -51,6 +51,9 @@ export default class NumbersStore {
 	@action
 	answer(answer) // send answer
 	{
+		if(answer !== answer)
+			answer = undefined;
+
 		this.next.answer = answer;
 		this.sock.send('vote', answer);
 	}

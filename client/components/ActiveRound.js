@@ -20,38 +20,36 @@ export default observer(props => {
 		<td>{props.id}</td>
 		<td>{props.question}</td>
 		<td>
-			{/*props.success === undefined 
-				? (props.answer
-				  	? "MISS" 
-				  	: <Buttons onAnswer={props.onAnswer} />
-				  )
-				: <Answer answer={props.answer} />
-			*/}
-
 			{props.answer === undefined
-				? (props.success === false ? "MISS" : <Buttons onAnswer={props.onAnswer} />)
-				: (props.answer === false ? "No" : "Yes")
+				? (props.success === false ? "MISS" : <Edit onAnswer={props.onAnswer} />)
+				: props.answer
 			}
 		</td>
 		<td>
 			{props.success === undefined
 				? null
-				: (props.success ? "OK" : "FAILED")
+				: (props.success ? OK : FAILED)
 			}
 		</td>
 	</tr>
 })
 
-const Buttons = props => 
-	<div>
-		<button className="ui green button" onClick={() => props.onAnswer(true)}>
-			Yes
-		</button>
-		&nbsp;
-		<button className="ui red button" onClick={() => props.onAnswer(false)}>
-			No
-		</button>			
-	</div>
+class Edit extends React.Component
+{
+	componentDidMount()
+	{
+		this.edit.focus();
+	}
 
-  
+	render()
+	{
+		const send = () => this.props.onAnswer(parseInt(this.edit.value));
 
+		return <div className="ui action input focus">
+			<input type="text" ref={i => this.edit = i} onKeyPress={e => (e.key == 'Enter') && send()}/>
+			<button className="ui green button" onClick={() => send()}>
+				Submit
+			</button>
+		</div>
+	}
+}
