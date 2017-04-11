@@ -7,7 +7,7 @@ export default class Server
 		this.members = [];
 		this.id = 1;
 
-		//this.NEW_GAME_TIMEOUT = 3000;
+		this.ROUND_TIMEOUT = 10 * 1000;
 	}
 
 	// registers new connection
@@ -43,7 +43,8 @@ export default class Server
 		this.round = {
 			id: this.id++,
 			answer: qu.answer, 
-			question: qu.question, 
+			question: qu.question,
+			timeout: setTimeout(() => this.timeout(), this.ROUND_TIMEOUT)
 		};
 		this.members = this.conns;
 
@@ -54,12 +55,10 @@ export default class Server
 	// ends the round
 	end()
 	{
-		//this.round = false;
+		clearTimeout(this.round.timeout);
 
 		for(const conn of this.conns)
 			conn.send('end');
-
-		//setTimeout(() => this.start(), this.NEW_GAME_TIMEOUT);
 
 		this.start(); // starts the new game immidiately
 	}
@@ -77,6 +76,12 @@ export default class Server
 
 		if(answer == this.round.answer)
   		this.end();
+	}
+
+	timeout()
+	{
+		for(const conn of this.members)
+			conn.onVote(undefined);
 	}
 
 	buildQuestion()

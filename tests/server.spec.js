@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import { shallow, mount } from 'enzyme';
-import { spy } from 'sinon';
+import sinon, { spy } from 'sinon';
 
 import Server from '../server/Server';
 
@@ -103,10 +103,6 @@ describe('server and the game', () => {
 		expect(newguy.send.calledWith('end')).to.be.eql(true);
 	});
 
-	it('ends the game when timeout happens', () => {
-		// FIXME: unimplemented
-	});
-
 	it('ends the game when everyone alse have logged out', () => {
 		newguy.send.reset();
 		gamer1.send.reset();
@@ -115,5 +111,22 @@ describe('server and the game', () => {
 		server.remove(gamer1);
 
 		expect(newguy.send.calledWith('end')).to.be.eql(true);
+	});
+
+
+	it('ends the game when timeout happens', () => {
+		// FIXME: unimplemented
+		const clock = sinon.useFakeTimers();
+
+		newguy.onVote(true);
+		newguy.send.reset();
+
+		clock.tick(5 * 1000);
+		expect(newguy.send.calledWith('end')).to.be.eql(false);
+
+		clock.tick(15 * 1000);
+		expect(newguy.send.calledWith('end')).to.be.eql(true);
+
+		clock.restore();
 	});
 });
