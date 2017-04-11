@@ -1,6 +1,7 @@
 import React from 'react';
 import { expect } from 'chai';
 import { shallow, mount } from 'enzyme';
+import { spy } from 'sinon';
 
 import Game from '../client/Game'; // FIXME: find a way to import from project root (webpack?)
 import GameTable from '../client/GameTable';
@@ -63,7 +64,16 @@ describe('GameTable', () => {
 		const wrapper = shallow(<GameTable rounds={store.rounds} next={store.next} />);
 		expect(wrapper.find(Round)).to.have.length(3);
 		expect(wrapper.find(ActiveRound)).to.have.length(1);
-	})
+	});
+
+	// it('calls the callback on aswer', () => {
+	// 	const answerSpy = spy();
+	// 	const wrapper = mount(<GameTable rounds={store.rounds} next={store.next} onAnswer={answerSpy} />);
+	// 	wrapper.find('button').filterWhere(b => b.text() == "Yes").simulate('click');
+		
+	// 	expect(answerSpy.calledOnce).to.eql(true);
+	// 	expect(answerSpy.calledWith('Yes')).to.eql(true);
+	// })
 })
 
 describe('Round', () => {
