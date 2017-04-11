@@ -102,9 +102,9 @@ class Server
 
 		while(true)
 		{
-			const a = Math.round(Math.random() * 11);
-			const b = Math.round(Math.random() * 10) + 1;
-			const o = Math.round(Math.random() * 3);
+			const a = Math.floor(Math.random() * 11);
+			const b = Math.floor(Math.random() * 10) + 1;
+			const o = Math.floor(Math.random() * 4);
 
 			const res = [a+b, a-b, a*b, a/b];
 			let result = res[o];
@@ -112,8 +112,9 @@ class Server
 
 			if(Math.round() > .5) // false answer
 			{
-				const n = (o + Math.round(Math.random() * 2) + 1) % 4;
+				const n = (o + Math.round(Math.random() * 3) + 1) % 4;
 				result = res[n];
+				answer = false;
 			}
 
 			if(result % 1 == 0) // anly whole numbers allowed
