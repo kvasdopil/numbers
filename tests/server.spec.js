@@ -3,17 +3,42 @@ import { shallow, mount } from 'enzyme';
 import sinon, { spy } from 'sinon';
 
 import Server from '../server/Server';
+import Client from '../server/Client';
+
+import { EventEmitter } from 'events';
+
+describe('client', () => {
+  it('can wrap an object and send messages', () => {
+  	const sock = new EventEmitter();
+  	sock.send = spy();
+
+  	const cli = new Client(sock);
+
+  	cli.send('hello', {1:[2,3]});
+
+  	expect(sock.send.calledWith('{"event":"hello","data":{"1":[2,3]}}')).to.be.eql(true);
+  });
+
+  it('can process incoming messages', () => {
+  	const sock = new EventEmitter();
+  	const cli = new Client(sock);
+  	const handler = spy();
+
+  	cli.on('vote', handler);
+
+  	sock.emit('message', '{"event":"vote","data":["somedata",2,3]}');
+  	expect(handler.calledWith(['somedata', 2, 3])).to.be.eql(true);
+  });
+});
 
 describe('server and conns', () => {
 	const server = new Server();
 
-	const conn = {
-		send: spy(),
-	};
+	const conn = new EventEmitter();
+	const conn2 = new EventEmitter();
 
-	const conn2 = {
-		send: spy(),
-	};
+	conn.send = spy();
+	conn2.send = spy();
 
 	it('emits number of connections', () => {
 		server.add(conn);
@@ -36,9 +61,12 @@ describe('server and conns', () => {
 
 describe('server and the game', () => {
 	const server = new Server();
-	const gamer1 = {send: spy()};
-	const gamer2 = {send: spy()};
-	const newguy = {send: spy()};
+
+	const gamer1 = new EventEmitter();
+	const newguy = new EventEmitter();
+
+	gamer1.send = spy();
+	newguy.send = spy();
 
 	it('starts the new game when first client appear', () => {
 		server.add(gamer1);
@@ -62,7 +90,7 @@ describe('server and the game', () => {
 	});
 
 	it('ends the game when correct answer recieved', () => {
-		gamer1.onVote(server.round.answer);
+		gamer1.emit('vote', server.round.answer);
 
 		expect(newguy.send.calledWith('end')).to.be.eql(true); // new clients also recieve the notification
 		expect(gamer1.send.calledWith('end')).to.be.eql(true);
@@ -80,17 +108,17 @@ describe('server and the game', () => {
 		newguy.send.reset();
 		gamer1.send.reset();
 
-		newguy.onVote(undefined);
+		newguy.emit('vote', undefined);
 		expect(newguy.send.calledWith('end')).to.be.eql(false);
 	});
 
 	it('doesnt allow vote twice', () => {
-		newguy.onVote(server.round.answer);
+		newguy.emit('vote', server.round.answer);
 		expect(newguy.send.calledWith('end')).to.be.eql(false);
 	});
 
 	it('ends the round when everyone has voted', () => {
-		gamer1.onVote(undefined);
+		gamer1.emit('vote', undefined);
 
 		expect(gamer1.send.calledWith('end')).to.be.eql(true);
 	});
@@ -99,7 +127,7 @@ describe('server and the game', () => {
 		newguy.send.reset();
 		gamer1.send.reset();
 
-		newguy.onVote(server.round.answer);
+		newguy.emit('vote', server.round.answer);
 		expect(newguy.send.calledWith('end')).to.be.eql(true);
 	});
 
@@ -107,7 +135,7 @@ describe('server and the game', () => {
 		newguy.send.reset();
 		gamer1.send.reset();
 
-		newguy.onVote(undefined);
+		newguy.emit('vote', undefined);
 		server.remove(gamer1);
 
 		expect(newguy.send.calledWith('end')).to.be.eql(true);
@@ -118,7 +146,7 @@ describe('server and the game', () => {
 		// FIXME: unimplemented
 		const clock = sinon.useFakeTimers();
 
-		newguy.onVote(server.round.answer);
+		newguy.emit('vote', server.round.answer);
 		newguy.send.reset();
 
 		clock.tick(5 * 1000);
@@ -130,3 +158,5 @@ describe('server and the game', () => {
 		clock.restore();
 	});
 });
+
+// FIXME: check round id when voting

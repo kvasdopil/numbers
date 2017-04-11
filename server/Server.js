@@ -13,7 +13,7 @@ export default class Server
 	// registers new connection
 	add(conn) 
 	{
-		conn.onVote = answer => this.vote(answer, conn);
+		conn.on('vote', answer => this.vote(answer, conn));
 
 		this.conns.push(conn);
 
@@ -27,7 +27,7 @@ export default class Server
 	// removes the connection
 	remove(conn)
 	{
-		conn.onVote(undefined); // emulate wrong answer 
+		this.vote(undefined, conn); // emulate wrong answer 
 
 		this.conns = this.conns.filter(c => c != conn);
 
@@ -82,7 +82,7 @@ export default class Server
 	timeout()
 	{
 		for(const conn of this.members)
-			conn.onVote(undefined);
+			this.vote(undefined, conn);
 	}
 
 	buildQuestion()
