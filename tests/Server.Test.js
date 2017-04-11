@@ -86,22 +86,35 @@ describe('server and the game', () => {
 	it('doesnt show new game to newcomers', () => {
 		server.add(newguy);
 
-		expect(newguy.send.calledWith('start')).to.be.eql(false);
-	});
+		expect(newguy.send.calledWith('start')).to.be.false;
+	})
+
+	let clock;
 
 	it('ends the game when correct answer recieved', () => {
+		clock = sinon.useFakeTimers();
+
 		gamer1.emit('vote', server.round.answer);
 
-		expect(newguy.send.calledWith('end', false)).to.be.eql(true); // new clients also recieve the notification
-		expect(gamer1.send.calledWith('end', true)).to.be.eql(true);
+		expect(newguy.send.calledWith('end', false)).to.be.true; // new clients also recieve the notification
+		expect(gamer1.send.calledWith('end', true)).to.be.true;
 	});
 
-	it('starts the new game after previous have finished', () => {
-		expect(newguy.send.calledWith('start')).to.be.eql(true); 
-		expect(gamer1.send.calledWith('start')).to.be.eql(true); // FIXME: should have recieved 2 'start' events by this time
+	// for some reason fake timers doesnt work here, so just disable the timeout
+  //server.NEW_ROUND_TIMEOUT=0;
+
+	it('start the new round after end of the previous one', () => {
+		expect(newguy.send.calledWith('start')).to.be.false; 
+
+		clock.tick(4 * 1000);
+
+		expect(newguy.send.calledWith('start')).to.be.true; 
+		expect(gamer1.send.calledWith('start')).to.be.true; 
 
 		const lastCall = gamer1.send.getCall(gamer1.send.callCount - 1);
-		expect(lastCall.args[1].id).to.eql(2);
+		expect(lastCall.args[1].id).to.eql(2); // id is correct
+
+		//clock.restore();
 	});
 
 	it('doesnt end the game when incorrect answer recieved', () => {
@@ -109,23 +122,27 @@ describe('server and the game', () => {
 		gamer1.send.reset();
 
 		newguy.emit('vote', undefined);
-		expect(newguy.send.calledWith('end')).to.be.eql(false);
+		expect(newguy.send.calledWith('end')).to.be.false;
 	});
 
 	it('doesnt allow vote twice', () => {
 		newguy.emit('vote', server.round.answer);
-		expect(newguy.send.calledWith('end')).to.be.eql(false);
+		expect(newguy.send.calledWith('end')).to.be.false;
 	});
 
 	it('ends the round when everyone has voted', () => {
 		gamer1.emit('vote', undefined);
 
-		expect(gamer1.send.calledWith('end', false)).to.be.eql(true);
+		expect(gamer1.send.calledWith('end', false)).to.be.true;
 	});
 
-	it('end the round when someone has voted correctly', () => {
+	it('ends the round when someone has voted correctly', () => {
 		newguy.send.reset();
 		gamer1.send.reset();
+
+		clock.tick(4*1000);
+
+		expect(newguy.send.calledWith('start')).to.be.true;
 
 		newguy.emit('vote', server.round.answer);
 		expect(newguy.send.calledWith('end')).to.be.true;
@@ -136,16 +153,18 @@ describe('server and the game', () => {
 		newguy.send.reset();
 		gamer1.send.reset();
 
+		clock.tick(4*1000);
+		expect(newguy.send.calledWith('start')).to.be.true;
+
 		newguy.emit('vote', undefined);
 		server.remove(gamer1);
 
 		expect(newguy.send.calledWith('end')).to.be.true;
 	});
 
-
 	it('ends the game when timeout happens', () => {
-		// FIXME: unimplemented
-		const clock = sinon.useFakeTimers();
+		clock.tick(4*1000);
+		expect(newguy.send.calledWith('start')).to.be.true;
 
 		newguy.emit('vote', server.round.answer);
 		newguy.send.reset();
@@ -156,7 +175,7 @@ describe('server and the game', () => {
 		clock.tick(15 * 1000);
 		expect(newguy.send.calledWith('end')).to.be.true;
 
-		clock.restore();
+	  clock.restore();
 	});
 });
 

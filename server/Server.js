@@ -8,6 +8,7 @@ class Server
 		this.id = 1;
 
 		this.ROUND_TIMEOUT = 10 * 1000;
+		this.NEW_ROUND_TIMEOUT = 3 * 1000;
 	}
 
 	// registers new connection
@@ -20,8 +21,8 @@ class Server
 		for(const conn of this.conns)
   		conn.send('stat', this.conns.length);
 
-  	if(this.round === false)
-  		this.start();
+  	if(this.conns.length == 1)
+  		this.start(); // start the game immidiately when 1st client connects
 	}
 
 	// removes the connection
@@ -38,6 +39,9 @@ class Server
 	// starts a new round
 	start()
 	{
+		if(this.round.id)
+			return; // already started
+
 		const qu = this.buildQuestion();
 
 		this.round = {
@@ -55,34 +59,41 @@ class Server
 	// ends the round
 	end(winner = false)
 	{
+		if(!this.round.id)
+			return; // not yet started
+
 		clearTimeout(this.round.timeout);
 
 		for(const conn of this.conns)
 			conn.send('end', conn == winner);
 
-		this.start(); // starts the new game immidiately
+		this.members = [];
+		this.round = {};
+
+  	setTimeout(() => this.start(), this.NEW_ROUND_TIMEOUT); // starts the new game later
 	}
 
 	// recieve an answer
 	vote(answer, conn)
 	{
+		if(!this.round.id)
+			return; // not yet started
+
 		if(this.members.filter(m => m == conn).length == 0)
-			return;
+			return; // already voted
+
+		if(answer == this.round.answer)
+  		return this.end(conn); // correct answer - end the game
 
 		this.members = this.members.filter(m => m != conn); // remove this connection from unvoted members
 
 		if(this.members.length == 0)
-			return this.end(); // everybody lost
-
-		if(answer == this.round.answer)
-  		this.end(conn);
+			return this.end(); //everyone lost - end the game
 	}
 
-	// emulate failed answer for all players
 	timeout()
 	{
-		for(const conn of this.members)
-			this.vote(undefined, conn);
+		this.end();
 	}
 
 	buildQuestion()
