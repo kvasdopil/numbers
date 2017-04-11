@@ -1,11 +1,11 @@
-import { EventEmitter } from 'events';
+const EventEmitter = require('events').EventEmitter;
 
-export default class Client extends EventEmitter
+class Client extends EventEmitter
 {
 	constructor(sock)
 	{
 		super();
-		
+
 		this.sock = sock;
 		this.onVote = () => {};
 
@@ -27,3 +27,5 @@ export default class Client extends EventEmitter
 		} catch(e) {}
 	}
 }
+
+module.exports = Client;

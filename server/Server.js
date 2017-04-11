@@ -1,4 +1,4 @@
-export default class Server 
+class Server 
 {
 	constructor()
 	{
@@ -110,3 +110,5 @@ export default class Server
 		}
 	}
 }
+
+module.exports = Server;
