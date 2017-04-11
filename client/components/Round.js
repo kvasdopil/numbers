@@ -2,14 +2,25 @@ import React from 'react';
 
 import { observer } from 'mobx-react';
 
-export default observer(props => <tr>
+export default observer(props => 
+{
+	let className = "";
+	// if(props.success === false)
+	// 	className = "negative";
+	// if(props.success === true)
+	// 	className = "positive";
+
+	return <tr className={className}>
 		<td>{props.id}</td>
 		<td>{props.question}</td>
 		<td>
 			{props.answer == undefined ? "MISS" : props.answer}
 		</td>
 		<td>
-			{props.success ? "OK" : "FAILED"}
+			{props.success 
+				? <span><i className="ui large green check icon"/>OK</span> 
+				: <span><i className="ui large red remove icon"/>FAILED</span>
+			}
 		</td>
 	</tr>
-)
+})
