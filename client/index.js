@@ -4,16 +4,11 @@ import ReactDom from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
 
 // TODO: production env
-// TODO: flow? ts?
-// TODO: server diagnostics output
+
 // TODO: store tests
 // TODO: tests for Connection
 
-// TODO: timeout before new game
-// TODO: star animation
 // TODO: table scroll animation
-
-// TODO: version with input
 // TODO: version with cards
 
 // TODO: description

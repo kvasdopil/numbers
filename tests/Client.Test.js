@@ -20,12 +20,3 @@ describe('EventEmitter', () => {
 		expect(callback.calledWith('Another try')).to.be.true;
 	});
 });
-
-// describe('NumbersStore', () => {
-// 	it('is empty by default', () => {
-// 		const store = new NumbersStore(new EventEmitter());
-
-// 		//expect(store.players).to.be.eql(1);
-// 		//expect(store.score).to.be.eql(0);
-// 	})
-// })

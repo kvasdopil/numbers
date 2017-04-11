@@ -12,7 +12,6 @@ const app = express();
 
 const server = http.createServer(app);
 
-// TODO: dev mode
 DevMode.start(app);
 
 app.use('/', express.static('static'));

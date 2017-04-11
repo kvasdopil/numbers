@@ -28,7 +28,7 @@ export default observer(props => {
 		<td>
 			{props.success === undefined
 				? null
-				: (props.success ? OK : FAILED)
+				: (props.success ? "OK" : "FAILED")
 			}
 		</td>
 	</tr>

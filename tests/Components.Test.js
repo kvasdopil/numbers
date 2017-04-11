@@ -19,18 +19,18 @@ const store = {
 	rounds: [
 		{
 			id: 123,
-			question: '10x10=100',
+			question: '10x10 = ?',
 			answer: undefined,
 			success: false,
 		},{
 			id: 345,
-			question: '10+10=10',
-			answer: false,
+			question: '10+10 = ?',
+			answer: 33,
 			success: true,
 		},{
 			id: 678,
-			question: '10-10=0',
-			answer: false,
+			question: '10-10 = ?',
+			answer: 22,
 			success: false,
 		},
 	],
@@ -56,15 +56,6 @@ describe('GameTable', () => {
 		expect(wrapper.find(Round)).to.have.length(3);
 		expect(wrapper.find(ActiveRound)).to.have.length(1);
 	});
-
-	// it('calls the callback on aswer', () => {
-	// 	const answerSpy = spy();
-	// 	const wrapper = mount(<GameTable rounds={store.rounds} next={store.next} onAnswer={answerSpy} />);
-	// 	wrapper.find('button').filterWhere(b => b.text() == "Yes").simulate('click');
-		
-	// 	expect(answerSpy.calledOnce).to.eql(true);
-	// 	expect(answerSpy.calledWith('Yes')).to.eql(true);
-	// })
 })
 
 describe('Round', () => {
@@ -83,7 +74,7 @@ describe('Round', () => {
 		expect(mount(<Round {...store.rounds[1]} />).text()).to.contain('OK');
 	})
 	it('renders your reply', () => {
-		expect(mount(<Round {...store.rounds[1]} />).text()).to.contain('No');
+		expect(mount(<Round {...store.rounds[1]} />).text()).to.contain('33');
 	})
 })
 
@@ -93,9 +84,10 @@ describe('ActiveRound', () => {
 		expect(wrapper.text()).to.contain(store.next.question);
 		expect(wrapper.text()).to.contain(store.next.id);
 	});
-	it('renders a pair of buttons', () => {
+	it('renders a button and an input field', () => {
 		const wrapper = mount(<ActiveRound {...store.next} />);
-		expect(wrapper.find('button')).to.have.length(2);
+		expect(wrapper.find('button')).to.have.length(1);
+		expect(wrapper.find('input')).to.have.length(1);
 	});
 	it('wont render buttons if missed already', () => {
 		const wrapper = mount(<ActiveRound {...store.next} success={false} />);

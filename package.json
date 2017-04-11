@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node server",
+    "build": "webpack",
     "test": "mocha --require tests/setup.js tests/*.Test.js",
     "watch": "mocha --watch --require tests/setup.js tests/*.Test.js"
   },

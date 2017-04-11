@@ -80,7 +80,7 @@ describe('server and the game', () => {
 	it('sends the question in correct format', () => {
 		const lastCall = gamer1.send.getCall(gamer1.send.callCount - 1);
 
-		expect(lastCall.args[1].question).to.match(/^[0-9]+[/*+-][0-9]+=[0-9-]+/);
+		expect(lastCall.args[1].question).to.match(/^[0-9]+[/*+-][0-9]+ = \?/);
 	})
 
 	it('doesnt show new game to newcomers', () => {
