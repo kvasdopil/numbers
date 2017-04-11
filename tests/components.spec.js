@@ -22,30 +22,23 @@ const store = {
 		{
 			id: 123,
 			question: '10x10=100',
-//			answer: true,
-			your: true, 
-			miss: true,
+			answer: undefined,
 			success: false,
 		},{
 			id: 345,
 			question: '10+10=10',
-//			answer: false,
-			your: false, 
-			miss: false,
+			answer: false,
 			success: true,
 		},{
 			id: 678,
 			question: '10-10=0',
-//			answer: true,
-			your: false, 
-			miss: false,
+			answer: false,
 			success: false,
 		},
 	],
 	next: {
 		id: 999,
 		question: '10/10=2',
-		miss: false,
 	},
 	players: 0,
 	score: 0,
@@ -106,8 +99,8 @@ describe('ActiveRound', () => {
 		const wrapper = mount(<ActiveRound {...store.next} />);
 		expect(wrapper.find('button')).to.have.length(2);
 	});
-	it('wont render buttons of missed already', () => {
-		const wrapper = mount(<ActiveRound {...store.next} miss />);
+	it('wont render buttons if missed already', () => {
+		const wrapper = mount(<ActiveRound {...store.next} success={false} />);
 		expect(wrapper.find('button')).to.have.length(0);
 		expect(wrapper.text()).to.contain('MISS');
 	});

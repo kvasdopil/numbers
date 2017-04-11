@@ -53,12 +53,12 @@ class Server
 	}
 
 	// ends the round
-	end()
+	end(winner = false)
 	{
 		clearTimeout(this.round.timeout);
 
 		for(const conn of this.conns)
-			conn.send('end');
+			conn.send('end', conn == winner);
 
 		this.start(); // starts the new game immidiately
 	}
@@ -75,7 +75,7 @@ class Server
 			return this.end(); // everybody lost
 
 		if(answer == this.round.answer)
-  		this.end();
+  		this.end(conn);
 	}
 
 	// emulate failed answer for all players

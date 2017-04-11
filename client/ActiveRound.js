@@ -20,18 +20,23 @@ export default observer(props => {
 		<td>{props.id}</td>
 		<td>{props.question}</td>
 		<td>
-			{props.answer === undefined 
-				? (props.miss 
+			{/*props.success === undefined 
+				? (props.answer
 				  	? "MISS" 
 				  	: <Buttons onAnswer={props.onAnswer} />
 				  )
 				: <Answer answer={props.answer} />
+			*/}
+
+			{props.answer === undefined
+				? (props.success === false ? "MISS" : <Buttons onAnswer={props.onAnswer} />)
+				: (props.answer === false ? "No" : "Yes")
 			}
 		</td>
 		<td>
-			{props.miss
-				? (props.success ? "OK" : "FAILED")
-				: null
+			{props.success === undefined
+				? null
+				: (props.success ? "OK" : "FAILED")
 			}
 		</td>
 	</tr>
@@ -48,12 +53,5 @@ const Buttons = props =>
 		</button>			
 	</div>
 
-const Answer = props =>
-  <span>
-	  {props.answer === false
-	    ? "Yes"
-	    : "No"
-	  }
-  </span>
   
 

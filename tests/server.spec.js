@@ -92,8 +92,8 @@ describe('server and the game', () => {
 	it('ends the game when correct answer recieved', () => {
 		gamer1.emit('vote', server.round.answer);
 
-		expect(newguy.send.calledWith('end')).to.be.eql(true); // new clients also recieve the notification
-		expect(gamer1.send.calledWith('end')).to.be.eql(true);
+		expect(newguy.send.calledWith('end', false)).to.be.eql(true); // new clients also recieve the notification
+		expect(gamer1.send.calledWith('end', true)).to.be.eql(true);
 	});
 
 	it('starts the new game after previous have finished', () => {
@@ -120,7 +120,7 @@ describe('server and the game', () => {
 	it('ends the round when everyone has voted', () => {
 		gamer1.emit('vote', undefined);
 
-		expect(gamer1.send.calledWith('end')).to.be.eql(true);
+		expect(gamer1.send.calledWith('end', false)).to.be.eql(true);
 	});
 
 	it('end the round when someone has voted correctly', () => {
@@ -128,7 +128,8 @@ describe('server and the game', () => {
 		gamer1.send.reset();
 
 		newguy.emit('vote', server.round.answer);
-		expect(newguy.send.calledWith('end')).to.be.eql(true);
+		expect(newguy.send.calledWith('end')).to.be.true;
+		expect(gamer1.send.calledWith('end')).to.be.true;
 	});
 
 	it('ends the game when everyone alse have logged out', () => {
@@ -138,7 +139,7 @@ describe('server and the game', () => {
 		newguy.emit('vote', undefined);
 		server.remove(gamer1);
 
-		expect(newguy.send.calledWith('end')).to.be.eql(true);
+		expect(newguy.send.calledWith('end')).to.be.true;
 	});
 
 
@@ -150,10 +151,10 @@ describe('server and the game', () => {
 		newguy.send.reset();
 
 		clock.tick(5 * 1000);
-		expect(newguy.send.calledWith('end')).to.be.eql(false);
+		expect(newguy.send.calledWith('end')).to.be.false;
 
 		clock.tick(15 * 1000);
-		expect(newguy.send.calledWith('end')).to.be.eql(true);
+		expect(newguy.send.calledWith('end')).to.be.true;
 
 		clock.restore();
 	});

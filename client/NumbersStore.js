@@ -21,13 +21,21 @@ export default class NumbersStore {
 	}
 
 	@action
-	end() // end round
+	end(success) // end round
 	{
-		if(this.next.id)
-		  this.rounds.push(this.next);
+		if(success)
+			this.score++; // FIXME: add animation here
+
+		if(!this.next.id)
+			return;
+
+		this.next.success = success;
+		this.rounds.push(this.next);
 
 		while(this.rounds.length > 10)
 			this.rounds.shift(); // FIXME: add animation here
+
+		console.log('rounds', this.rounds.concat());
 
 		this.next = {};
 	}
@@ -45,6 +53,7 @@ export default class NumbersStore {
 	@action
 	answer(answer) // send answer
 	{
+		console.log('answer', answer)
 		this.next.answer = answer;
 		this.sock.send('vote', answer);
 	}
@@ -55,6 +64,6 @@ export default class NumbersStore {
 
   	sock.on('stat', data => this.updateStat(data));
   	sock.on('start', data => this.start(data));
-  	sock.on('end', data => this.end(data));
+  	sock.on('end', win => this.end(win));
   }
 }

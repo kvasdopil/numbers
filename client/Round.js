@@ -7,16 +7,13 @@ export default observer(props =>
 		<td>{props.id}</td>
 		<td>{props.question}</td>
 		<td>
-			{props.miss 
+			{props.answer == undefined 
 				? "MISS" 
-				: props.your ? "Yes" : "No"
+				: props.answer ? "Yes" : "No"
 			}
 		</td>
 		<td>
-			{props.miss 
-				? "FAILED"
-				: (props.success ? "OK" : "FAILED")
-			}
+			{props.success ? "OK" : "FAILED"}
 		</td>
 	</tr>
 )

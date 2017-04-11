@@ -19,7 +19,7 @@ describe('EventEmitter', () => {
 		e.emit('test', 'Another try');
 		expect(callback.calledWith('Another try')).to.be.true;
 	});
-})
+});
 
 // describe('NumbersStore', () => {
 // 	it('is empty by default', () => {
