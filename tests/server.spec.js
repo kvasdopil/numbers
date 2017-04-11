@@ -52,7 +52,7 @@ describe('server and the game', () => {
 	it('sends the question in correct format', () => {
 		const lastCall = gamer1.send.getCall(gamer1.send.callCount - 1);
 
-		expect(lastCall.args[1].question).to.match(/^[0-9]+[/*+-][0-9]+=[0-9]+/);
+		expect(lastCall.args[1].question).to.match(/^[0-9]+[/*+-][0-9]+=[0-9-]+/);
 	})
 
 	it('doesnt show new game to newcomers', () => {
@@ -62,7 +62,7 @@ describe('server and the game', () => {
 	});
 
 	it('ends the game when correct answer recieved', () => {
-		gamer1.onVote(true);
+		gamer1.onVote(server.round.answer);
 
 		expect(newguy.send.calledWith('end')).to.be.eql(true); // new clients also recieve the notification
 		expect(gamer1.send.calledWith('end')).to.be.eql(true);
@@ -80,17 +80,17 @@ describe('server and the game', () => {
 		newguy.send.reset();
 		gamer1.send.reset();
 
-		newguy.onVote(false);
+		newguy.onVote(undefined);
 		expect(newguy.send.calledWith('end')).to.be.eql(false);
 	});
 
 	it('doesnt allow vote twice', () => {
-		newguy.onVote(true);
+		newguy.onVote(server.round.answer);
 		expect(newguy.send.calledWith('end')).to.be.eql(false);
 	});
 
 	it('ends the round when everyone has voted', () => {
-		gamer1.onVote(false);
+		gamer1.onVote(undefined);
 
 		expect(gamer1.send.calledWith('end')).to.be.eql(true);
 	});
@@ -99,7 +99,7 @@ describe('server and the game', () => {
 		newguy.send.reset();
 		gamer1.send.reset();
 
-		newguy.onVote(true);
+		newguy.onVote(server.round.answer);
 		expect(newguy.send.calledWith('end')).to.be.eql(true);
 	});
 
@@ -107,7 +107,7 @@ describe('server and the game', () => {
 		newguy.send.reset();
 		gamer1.send.reset();
 
-		newguy.onVote(false);
+		newguy.onVote(undefined);
 		server.remove(gamer1);
 
 		expect(newguy.send.calledWith('end')).to.be.eql(true);
@@ -118,7 +118,7 @@ describe('server and the game', () => {
 		// FIXME: unimplemented
 		const clock = sinon.useFakeTimers();
 
-		newguy.onVote(true);
+		newguy.onVote(server.round.answer);
 		newguy.send.reset();
 
 		clock.tick(5 * 1000);

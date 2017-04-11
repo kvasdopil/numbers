@@ -78,6 +78,7 @@ export default class Server
   		this.end();
 	}
 
+	// emulate failed answer for all players
 	timeout()
 	{
 		for(const conn of this.members)
@@ -87,12 +88,25 @@ export default class Server
 	buildQuestion()
 	{
 		const ops = ['+','-','*','/'];
-		const a = Math.round(Math.random() * 11);
-		const b = Math.round(Math.random() * 10) + 1;
-		const o = Math.round(Math.random() * 3);
 
-		const res = [a+b, a-b, a*b, a/b]
+		while(true)
+		{
+			const a = Math.round(Math.random() * 11);
+			const b = Math.round(Math.random() * 10) + 1;
+			const o = Math.round(Math.random() * 3);
 
-		return {question: `${a}${ops[o]}${b}=${res[o]}`, answer: true};
+			const res = [a+b, a-b, a*b, a/b];
+			let result = res[o];
+			let answer = true;
+
+			if(Math.round() > .5) // false answer
+			{
+				const n = (o + Math.round(Math.random() * 2) + 1) % 4;
+				result = res[n];
+			}
+
+			if(result % 1 == 0) // anly whole numbers allowed
+  			return {question: `${a}${ops[o]}${b}=${result}`, answer};
+		}
 	}
 }
