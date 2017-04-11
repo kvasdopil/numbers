@@ -35,8 +35,6 @@ export default class NumbersStore {
 		while(this.rounds.length > 10)
 			this.rounds.shift(); // FIXME: add animation here
 
-		console.log('rounds', this.rounds.concat());
-
 		this.next = {};
 	}
 
@@ -53,7 +51,6 @@ export default class NumbersStore {
 	@action
 	answer(answer) // send answer
 	{
-		console.log('answer', answer)
 		this.next.answer = answer;
 		this.sock.send('vote', answer);
 	}

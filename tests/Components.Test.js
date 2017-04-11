@@ -3,13 +3,11 @@ import { expect } from 'chai';
 import { shallow, mount } from 'enzyme';
 import { spy } from 'sinon';
 
-import Game from '../client/Game'; // FIXME: find a way to import from project root (webpack?)
-import GameTable from '../client/GameTable';
-import GameStats from '../client/GameStats';
-import Round from '../client/Round';
-import ActiveRound from '../client/ActiveRound';
-
-import NumbersStore from '../client/NumbersStore';
+import Game        from '../client/components/Game'; // FIXME: find a way to import from project root (webpack?)
+import GameTable   from '../client/components/GameTable';
+import GameStats   from '../client/components/GameStats';
+import Round       from '../client/components/Round';
+import ActiveRound from '../client/components/ActiveRound';
 
 describe('the setup', () => {
 	it('works', () => {
@@ -122,20 +120,3 @@ describe('GameStats', () => {
 	})
 })
 
-// describe('NumbersStore', () => {
-// 	it('can load data', () => {
-// 		const store = new NumbersStore();
-
-// 		expect(store.rounds).to.be.false;
-// 		store.load();
-
-// 		expect(store.rounds).to.have.length(3);
-// 	})
-
-// 	it('can send result', () => {
-// 		const store = new NumbersStore();
-// 		store.load();
-
-// 		store.sendAnswer(true);
-// 	})
-// });

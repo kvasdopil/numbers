@@ -1,5 +1,5 @@
 /*
-* Handy class to use with connections, so ws interface is the same on both client and server
+* node.js event emitter for use in browser
 */
 export class EventEmitter
 {
@@ -18,6 +18,9 @@ export class EventEmitter
 	}
 }
 
+/*
+* Handy class to use with connections, so ws interface is the same on both client and server
+*/
 export default class Connection extends EventEmitter
 {
 	constructor(sock)
@@ -31,7 +34,7 @@ export default class Connection extends EventEmitter
 	{
 		try {
 	  	data = JSON.parse(data);
-	  	console.log(data.event, data.data);
+	  	//console.log(data.event, data.data);
 	  	this.emit(data.event, data.data);
   	} catch(e) {}
 	}

@@ -6,9 +6,19 @@ import { AppContainer } from 'react-hot-loader';
 // TODO: production env
 // TODO: flow? ts?
 // TODO: server diagnostics output
-// TODO: client tests
+// TODO: store tests
+// TODO: tests for Connection
 
-import Game from './Game';
+// TODO: timeout before new game
+// TODO: star animation
+// TODO: table scroll animation
+
+// TODO: version with input
+// TODO: version with cards
+
+// TODO: description
+
+import Game from './components/Game';
 import Connection from './Connection';
 
 import NumbersStore from './NumbersStore';
@@ -30,6 +40,6 @@ const render = Comp =>
 render(Game);
 
 if(module.hot)
-	module.hot.accept('./Game', () => 
-    render(require('./Game').default)
+	module.hot.accept('./components/Game', () => 
+    render(require('./components/Game').default)
 	)
