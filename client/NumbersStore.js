@@ -1,8 +1,8 @@
-import { observable } from 'mobx';
+import { observable, action } from 'mobx';
 
 // FIXME: decorators only work with legacy plugin until babel 7
 // this breaks 'env' preset, and only works with 'es2015' + 'stage-0' presets
-// i.e. docorators work only when transpiling to es5
+// i.e. decorators work only when transpiling to es5
 
 export default class NumbersStore {
 	@observable players = 1;
@@ -12,24 +12,29 @@ export default class NumbersStore {
 
 	@observable next = {};
 
+	sock = undefined;
+
+	@action
 	updateStat(data)
 	{
 		this.players = data;
 	}
 
-	endRound(round)
+	@action
+	end() // end round
 	{
-		console.log('end', round);
-		this.rounds.push(round);
+		if(this.next.id)
+		  this.rounds.push(this.next);
+
 		while(this.rounds.length > 10)
 			this.rounds.shift(); // FIXME: add animation here
 
 		this.next = {};
 	}
 
-	startNextRound(data)
+	@action
+	start(data) // start new round
 	{
-  	//this.endRound();
 		this.next = {
 			id: data.id,
 			question: data.question,
@@ -37,42 +42,19 @@ export default class NumbersStore {
 		};
 	}
 
-	onAnswer(answer)
+	@action
+	answer(answer) // send answer
 	{
 		this.next.answer = answer;
-		this.send('answer', answer);
-	}
-
-	handlers = [];
-
-	on(event, handler)
-	{
-		this.handlers.push({event, handler});
-	}
-
-	emit(event, data)
-	{
-		this.handlers.filter(h => h.event == event).map(h => h.handler(data));	
+		this.sock.send('vote', answer);
 	}
 
   constructor(sock)
   {
   	this.sock = sock;
-		this.sock.onmessage = data => {
-  		data = JSON.parse(data.data);
-  		console.log('message', data);
-  		this.emit(data.event, data.data);
-  	}
- 
-  	this.on('stat', data => this.updateStat(data));
-  	this.on('next', data => this.startNextRound(data));
-  	this.on('end', data => this.endRound(data));
-  }
 
-  send(event, data)
-  {
-  	try {
-  		this.sock.send(JSON.stringify({event, data}));
-  	} catch(e) {}
+  	sock.on('stat', data => this.updateStat(data));
+  	sock.on('start', data => this.start(data));
+  	sock.on('end', data => this.end(data));
   }
 }

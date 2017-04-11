@@ -11,7 +11,7 @@ export default observer(props =>
 		<GameTable 
 			rounds={props.store.rounds} 
 			next={props.store.next} 
-			onAnswer={a => props.store.onAnswer(a)}
+			onAnswer={a => props.store.answer(a)}
 		/>
 	</div>
 )
