@@ -17,7 +17,9 @@ So, since the game is realtime the best option is use websockets for all communi
 
 The frontend uses React and hot module reload is nice thing to have since it saves tons of time. The game server has --devmode command-line options that loads webpack/babel/hmr/etc and rebuilds the bundle dynamically. Without that the server runs as a static http server/websocket server.
 
-State management on the client is done with mobx library. I consider that the best option for given task since it produces very clean and compact code that is also pretty straightforward and self-explaining.
+State management on the client is done with mobx library. I consider that the best option for given task since it produces very clean and compact code that is also pretty straightforward and self-explaining. 
+
+The UI uses Semantic-UI library, I prefer that over bootstrap since it's more powerful and uses more sensible class naming convention that is easy to use and remember.
 
 Tests were made for all parts of the game - ui components, ui store, libs and server.
 
