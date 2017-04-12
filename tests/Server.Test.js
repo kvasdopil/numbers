@@ -68,6 +68,8 @@ describe('server and the game', () => {
 	gamer1.send = spy();
 	newguy.send = spy();
 
+	let clock;
+
 	it('starts the new game when first client appear', () => {
 		server.add(gamer1);
 
@@ -89,8 +91,6 @@ describe('server and the game', () => {
 		expect(newguy.send.calledWith('start')).to.be.false;
 	})
 
-	let clock;
-
 	it('ends the game when correct answer recieved', () => {
 		clock = sinon.useFakeTimers();
 
@@ -99,9 +99,6 @@ describe('server and the game', () => {
 		expect(newguy.send.calledWith('end', false)).to.be.true; // new clients also recieve the notification
 		expect(gamer1.send.calledWith('end', true)).to.be.true;
 	});
-
-	// for some reason fake timers doesnt work here, so just disable the timeout
-  //server.NEW_ROUND_TIMEOUT=0;
 
 	it('start the new round after end of the previous one', () => {
 		expect(newguy.send.calledWith('start')).to.be.false; 
@@ -114,7 +111,6 @@ describe('server and the game', () => {
 		const lastCall = gamer1.send.getCall(gamer1.send.callCount - 1);
 		expect(lastCall.args[1].id).to.eql(2); // id is correct
 
-		//clock.restore();
 	});
 
 	it('doesnt end the game when incorrect answer recieved', () => {

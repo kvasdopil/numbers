@@ -5,10 +5,6 @@ import { observer } from 'mobx-react';
 export default observer(props => 
 {
 	let className = "";
-	// if(props.success === false)
-	// 	className = "negative";
-	// if(props.success === true)
-	// 	className = "positive";
 
 	return <tr className={className}>
 		<td>{props.id}</td>

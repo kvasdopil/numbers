@@ -1,16 +1,16 @@
 import React from 'react';
 
-import GameTable from './GameTable';
-import GameStats from './GameStats';
+import Table from './Table';
+import Stats from './Stats';
 
 import { observer } from 'mobx-react';
 
 export default observer(props => 
 	<div className="panel">
-		<GameStats players={props.store.players} score={props.store.score}/>
-		<GameTable 
+		<Stats players={props.store.players} score={props.store.score}/>
+		<Table 
 			rounds={props.store.rounds} 
-			next={props.store.next} 
+			current={props.store.current} 
 			onAnswer={a => props.store.answer(a)}
 		/>
 	</div>

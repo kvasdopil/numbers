@@ -16,13 +16,13 @@ import { AppContainer } from 'react-hot-loader';
 import Game from './components/Game';
 import Connection from './Connection';
 
-import NumbersStore from './NumbersStore';
+import Store from './Store';
 
 document.title = 'The Numbers Game';
 
 const sock = new WebSocket(`ws://${document.location.host}/numbers`); // FIXME: reconnect on failure
 
-const store = new NumbersStore(new Connection(sock));
+const store = new Store(new Connection(sock));
 
 const render = Comp =>
 	ReactDom.render(

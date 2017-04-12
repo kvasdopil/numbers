@@ -3,7 +3,7 @@ import { observer } from 'mobx-react';
 
 
 @observer
-export default class GameStats extends React.Component
+export default class Stats extends React.Component
 {
 	star = undefined;
 	players = undefined;

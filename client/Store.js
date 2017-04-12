@@ -4,13 +4,13 @@ import { observable, action } from 'mobx';
 // this breaks 'env' preset, and only works with 'es2015' + 'stage-0' presets
 // i.e. decorators work only when transpiling to es5
 
-export default class NumbersStore {
+export default class Store {
 	@observable players = 1;
 	@observable score = 0;
 
 	@observable rounds = [];
 
-	@observable next = {};
+	@observable current = {};
 
 	sock = undefined;
 
@@ -26,22 +26,22 @@ export default class NumbersStore {
 		if(success)
 			this.score++; 
 
-		if(!this.next.id)
+		if(!this.current.id)
 			return;
 
-		this.next.success = success;
-		this.rounds.push(this.next);
+		this.current.success = success;
+		this.rounds.push(this.current);
 
 		while(this.rounds.length > 10)
 			this.rounds.shift(); // FIXME: add animation here
 
-		this.next = {};
+		this.current = {};
 	}
 
 	@action
 	start(data) // start new round
 	{
-		this.next = {
+		this.current = {
 			id: data.id,
 			question: data.question,
 			answer: undefined,
@@ -54,7 +54,7 @@ export default class NumbersStore {
 		if(answer !== answer)
 			answer = undefined;
 
-		this.next.answer = answer;
+		this.current.answer = answer;
 		this.sock.send('vote', answer);
 	}
 

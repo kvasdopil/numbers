@@ -1,6 +1,6 @@
 import React from 'react';
 import Round from './Round';
-import ActiveRound from './ActiveRound';
+import Current from './Current';
 
 import { observer } from 'mobx-react';
 
@@ -19,7 +19,7 @@ export default observer(props =>
 				{props.rounds.map(round => 
 					<Round key={round.id} {...round} />
 				)}
-				<ActiveRound key={props.next.id} {...props.next} onAnswer={props.onAnswer}/>
+				<Current {...props.current} onAnswer={props.onAnswer}/>
 			</tbody>
 		</table>
 	</div>

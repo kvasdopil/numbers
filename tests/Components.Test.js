@@ -3,11 +3,11 @@ import { expect } from 'chai';
 import { shallow, mount } from 'enzyme';
 import { spy } from 'sinon';
 
-import Game        from '../client/components/Game'; // FIXME: find a way to import from project root (webpack?)
-import GameTable   from '../client/components/GameTable';
-import GameStats   from '../client/components/GameStats';
-import Round       from '../client/components/Round';
-import ActiveRound from '../client/components/ActiveRound';
+import Game    from '../client/components/Game'; // FIXME: find a way to import from project root (webpack?)
+import Table   from '../client/components/Table';
+import Stats   from '../client/components/Stats';
+import Round   from '../client/components/Round';
+import Current from '../client/components/Current';
 
 describe('the setup', () => {
 	it('works', () => {
@@ -34,7 +34,7 @@ const store = {
 			success: false,
 		},
 	],
-	next: {
+	current: {
 		id: 999,
 		question: '10/10=2',
 	},
@@ -45,16 +45,16 @@ const store = {
 describe('Game', () => {
 	const wrapper = shallow(<Game store={store} />);
 	it('contains the table and score', () => {
-		expect(wrapper.find(GameTable)).to.have.length(1);
-		expect(wrapper.find(GameStats)).to.have.length(1);
+		expect(wrapper.find(Table)).to.have.length(1);
+		expect(wrapper.find(Stats)).to.have.length(1);
 	})
 });
 
-describe('GameTable', () => {
+describe('Table', () => {
 	it('contains some rounds', () => {
-		const wrapper = shallow(<GameTable rounds={store.rounds} next={store.next} />);
+		const wrapper = shallow(<Table rounds={store.rounds} current={store.current} />);
 		expect(wrapper.find(Round)).to.have.length(3);
-		expect(wrapper.find(ActiveRound)).to.have.length(1);
+		expect(wrapper.find(Current)).to.have.length(1);
 	});
 })
 
@@ -78,35 +78,35 @@ describe('Round', () => {
 	})
 })
 
-describe('ActiveRound', () => {
+describe('Current', () => {
 	it('renders id and question', () => {
-		const wrapper = mount(<ActiveRound {...store.next} />);
-		expect(wrapper.text()).to.contain(store.next.question);
-		expect(wrapper.text()).to.contain(store.next.id);
+		const wrapper = mount(<Current {...store.current} />);
+		expect(wrapper.text()).to.contain(store.current.question);
+		expect(wrapper.text()).to.contain(store.current.id);
 	});
 	it('renders a button and an input field', () => {
-		const wrapper = mount(<ActiveRound {...store.next} />);
+		const wrapper = mount(<Current {...store.current} />);
 		expect(wrapper.find('button')).to.have.length(1);
 		expect(wrapper.find('input')).to.have.length(1);
 	});
 	it('wont render buttons if missed already', () => {
-		const wrapper = mount(<ActiveRound {...store.next} success={false} />);
+		const wrapper = mount(<Current {...store.current} success={false} />);
 		expect(wrapper.find('button')).to.have.length(0);
 		expect(wrapper.text()).to.contain('MISS');
 	});
 	it('will render spinner when waiting for new round', () => {
-		const wrapper = mount(<ActiveRound />);
+		const wrapper = mount(<Current />);
 		expect(wrapper.text()).to.contain('aiting');
 	});
 	it('wont render buttons when answer is sent', () => {
-	  const wrapper = mount(<ActiveRound answer={false}/>);
+	  const wrapper = mount(<Current answer={false}/>);
 		expect(wrapper.find('button')).to.have.length(0);
 	})
 })
 
-describe('GameStats', () => {
+describe('Stats', () => {
 	it('shows user count and your score', () => {
-		const wrapper = shallow(<GameStats score={999} players={888} />);
+		const wrapper = shallow(<Stats score={999} players={888} />);
 		expect(wrapper.text()).to.contain("999");
 		expect(wrapper.text()).to.contain("888");
 	})
